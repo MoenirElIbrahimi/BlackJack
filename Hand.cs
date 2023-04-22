@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlackJack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,27 +9,13 @@ namespace BlackJack
 {
     internal class Hand
     {
-        public List<Cards> cards = new List<Cards>();
-        private int checkScore;
-        private bool isOpen;
+        private List<card> cards = new List<card>();
 
-        public Hand(int checkScore,bool isOpen) {
-            this.checkScore = checkScore;
-            this.isOpen = isOpen;
-        }
-        public int CheckScore { get {  return checkScore; } }
-        public bool IsOpen { get { return isOpen; } }
-        public bool Hit(Cards cards) {
-
-            return true;
-        } 
-        public void stand()
+        public void Setcard(card Card)
         {
-
-        }
-        public int total() {
-            return 0; 
+            cards.Add(new card(Card.getnaam(), Card.getvalue()));
         }
 
+        public List<card> Getcards() { return cards; }
     }
 }

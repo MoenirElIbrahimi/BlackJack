@@ -6,29 +6,166 @@ using System.Threading.Tasks;
 
 namespace BlackJack
 {
-    internal class Dealer
+    internal class dealer
     {
-        public Hand hands = new Hand();
-        public void stand()
+         public Hand Hand = new();
+        private card? first;
+        private int counted;
+        private int countedD;
+        public bool klaar = false;
+        private int winstreak;
+
+        public string? Score { get; internal set; }
+
+        public void Stand()
         {
+            this.klaar = true;
+        }
+
+        public void Hit(card Card)
+        {
+            Hand.Setcard(Card);
+        }
+
+        public void dealerwon()
+        {
+            this.winstreak++;
+        }
+
+        public card? Givecard(deck deck,  card first)
+        {
+            List<card> cards = deck.Getcards();
+            var proceed = true;
+            try
+            {
+                this.first = cards.First(card => card != null);
+                cards.Remove(this.first);
+                cards.Add(this.first);
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("There are no more cards in the deck.");
+                proceed = false;
+
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+                proceed = false;
+            }
+            if (proceed)
+            {
+                return this.first;
+            }
+            return null;
+        }
+
+        public void Shuffle(List<card> cards, deck deck)
+        {
+            Random rng = new Random();
+            int n = cards.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                card temp = cards[k];
+                cards[k] = cards[n];
+                cards[n] = temp;
+            }
+
+            deck.Setcards(cards);
 
         }
-        public bool hit(Cards cards)
+
+        public static bool CheckCards(List<card> cards)
         {
-            return true;
+            bool hasAce = false;
+            bool hasTen = false;
+
+            foreach (card card in cards)
+            {
+                var value = Convert.ToInt32(card.getvalue());
+                if (card.getnaam() == "Ace")
+                {
+                    hasAce = true;
+                }
+                else if (value == 10)
+                {
+                    hasTen = true;
+                }
+
+                if (hasAce && hasTen)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
-        public void checkBlackjackHand()
+
+        public void checkwon(Hand hand, player player)
         {
+            List<card> cards = hand.Getcards();
+            bool go_on = true;
+            foreach (card card in cards)
+            {
+                int nummer = Convert.ToInt32(card.getvalue());
+
+                this.counted += nummer;
+            }
+            List<card> cards2 = this.Hand.Getcards();
+            foreach (card card in cards2)
+            {
+                int nummer = Convert.ToInt32(card.getvalue());
+
+                this.countedD += nummer;
+            }
+
+            if (this.counted > 21)
+            {
+                Console.WriteLine("player lost");
+                go_on = false;
+                dealerwon();
+            }
+            if (go_on = true && this.countedD > 21)
+            {
+                Console.WriteLine("player wins");
+                go_on = false;
+                player.playerwon();
+            }
+            if (go_on = true && this.counted > this.countedD)
+            {
+                Console.WriteLine("player wins");
+                go_on = false;
+                player.playerwon();
+            }
+            if (go_on = true && this.counted < this.countedD)
+            {
+                Console.WriteLine("player lost");
+                dealerwon();
+            }
 
         }
 
-        public int checkwon(Hand hand)
+        public void dealerhand()
         {
-            return 0;
+            List<card> cards = Hand.Getcards();
+            foreach (card card in cards)
+            {
+                string first = card.getnaam();
+                string second = card.getvalue();
+                Console.WriteLine("card Name: " + first + " Value: " + second);
+            }
         }
-            
 
+        internal void Shuffle()
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        internal void Deal()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

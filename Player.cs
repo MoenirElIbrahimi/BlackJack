@@ -1,38 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BlackJack
 {
-
-
-    internal class Player
+    internal class player
     {
- 
-   
-        bool IsPlaying= true;
-        public List <Hand> hands= new List<Hand>();
-        
-    public Player ( )
-        {
+        Hand Hand = new Hand();
+        private int winstreak;
+        public bool klaar = false;
 
-        }
-        public bool Bet (int amount)
+        public void Stand()
         {
-            return true;
+            this.klaar = true;
         }
-        public bool hit(Cards cards)
-        { return true;
-        }
-        public void stand()
+
+        public void hit(card Card)
         {
-            
+            Hand.Setcard(Card);
         }
- 
 
+        public void playerwon()
+        {
+            this.winstreak++;
+        }
 
-           
+        public void playershowhand()
+        {
+            List<card> cards = Hand.Getcards();
+            foreach (card card in cards)
+            {
+                string first = card.getnaam();
+                string second = card.getvalue();
+                Console.WriteLine("card Name: " + first + " Value: " + second);
+            }
+        }
+
+        public Hand gethand()
+        {
+            return this.Hand;
+        }
     }
 }
